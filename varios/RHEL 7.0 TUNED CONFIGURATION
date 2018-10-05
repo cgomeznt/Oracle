@@ -1,0 +1,59 @@
+RHEL 7.0 TUNED CONFIGURATION
+==============================
+
+posted May 6, 2016, 4:25 PM by
+by Jeff Stonacek, Principal Architect
+
+In October of 2014, I wrote a blog describing how to use the Tuned daemon to make system settings persistent across reboots.  Specifically, disabling transparent HugePages (THP).  That blog was written with RHEL 6.x in mind.  However since then, RHEL 7 has become more popular and supported.  As with many things, there are significant changes to Tuned in RHEL 7.
+
+As a refresher, Tuned is a daemon process that was introduced in RHEL 6 to monitor RHEL systems and dynamically make system changes.  It is recommended to configure and run Tuned on RHEL 7, in order to make certain system settings permanent.  The recommended profile for Oracle database workloads is “throughput-performance”.  However, there are things we want to add to this profile, such as disabling transparent HugePages.
+
+The included profiles cannot be modified. Every time the Tuned package is updated, the update overwrites any customizations to those configuration files.  To disable transparent HugePages with Tuned, for example, create a custom profile and include throughput-performance in the custom profile.  The example below will explain it much better than words.
+
+If Tuned is not installed, first install it with yum.::
+
+	# yum install tuned
+ 
+
+Perform the following steps to create a custom profile so Tuned will disable THP.  Also, include the VMM settings that are recommended for Oracle, so the throughput-performance profile does not change them.  The contents of the custom tuned.conf file are highlighted in yellow below.::
+
+	# mkdir /etc/tuned/oracle
+	# vi /etc/tuned/oracle/tuned.conf
+
+	[main]
+	include=throughput-performance
+
+	[vm]
+	transparent_hugepages=never
+
+	[sysctl]
+	vm.swappiness = 1
+	vm.dirty_background_ratio = 3
+	vm.dirty_ratio = 80
+	vm.dirty_expire_centisecs = 500
+	vm.dirty_writeback_centisecs = 100
+
+
+	# chmod +x /etc/tuned/oracle/tuned.conf
+	 
+
+A word of note: For RHEL 7, the standard Tuned profiles are located in /usr/lib/tuned.  Again, do not modify these profiles directly.
+
+Now, enable the custom Tuned profile.::
+
+	# tuned-adm profile oracle
+	 
+
+Next, check to make sure the profile is active.::
+
+	# tuned-adm active
+	Current active profile: oracle
+	 
+
+After activating the profile, THP should be disabled.  Run the following command to verify.::
+
+	# cat /sys/kernel/mm/transparent_hugepage/enabled always [never]
+ 
+
+CONCLUSION:
+In this blog, we described how to use the Tuned daemon to make system settings permanent.  This is an easy and foolproof way to keep your system settings the way you want them.

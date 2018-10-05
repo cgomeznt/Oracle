@@ -1,0 +1,8 @@
+sqlplus / as sysdba
+select status from v$instance;
+
+lsnrctl status
+
+
+
+

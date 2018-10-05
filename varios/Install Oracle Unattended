@@ -1,0 +1,62 @@
+
+Install the following packages:
+yum -y install \
+binutils compat-libcap1 compat-libstdc++-33 compat-libstdc++-33.i686 glibc glibc.i686 glibc-devel glibc-devel.i686 \
+ksh libaio libaio.i686 libaio-devel libaio-devel.i686 libX11 libX11.i686 libXau libXau.i686 libXi libXi.i686 \
+libXtst libXtst.i686 libgcc libgcc.i686 libstdc++ libstdc++.i686 libstdc++-devel libstdc++-devel.i686 libxcb \
+libxcb.i686 make nfs-utils net-tools smartmontools sysstat unixODBC unixODBC-devel gcc gcc-c++ libXext libXext.i686 zlib-devel zlib-devel.i686
+
+Add the operating system groups:
+groupadd -g 54321 oinstall
+groupadd -g 54322 dba
+groupadd -g 54323 oper
+
+Create the Oracle user:
+useradd –u 54321 –g oinstall –G dba,oracle,oper
+
+Set the password for the Oracle user:
+passwd oracle
+
+Create the top level directory for the Oracle user, change the ownership, and set privileges:
+mkdir –p /u01
+chown oracle:dba /u01
+chmod 775 /u01
+
+Now, as Oracle, download the Oracle software from OTN or Oracle Software Delivery.
+Unzip the downloaded file:
+unzip linuxx64_12201_database.zip
+
+Configure Tuned as described in House of Brick’s blog post http://houseofbrick.com/rhel-7-0-tuned-configuration/ (Tuned is installed by default on RHEL7).
+
+Cd to the ./database/response directory.
+Copy the db_install.rsp file to the ./database directory. In my case, it will be copied from /home/oracle/database/response directory to /home/oracle/database
+Modify the following lines (only) to read as follows (or customize for your environment) in the file /home/oracle/database/db_install.rsp:
+oracle.install.option=INSTALL_DB_SWONLY
+ UNIX_GROUP_NAME=oinstall
+ INVENTORY_LOCATION=/u01/app/oraInventory
+ ORACLE_HOME=/u01/app/oracle/product/12.2.0.1/dbhome_1
+ ORACLE_BASE=/u01/app/oracle
+ oracle.install.db.InstallEdition=EE
+ oracle.install.db.OSDBA_GROUP=dba
+ oracle.install.db.OSOPER_GROUP=dba
+ oracle.install.db.OSBACKUPDBA_GROUP=dba
+ oracle.install.db.OSDGDBA_GROUP=dba
+ oracle.install.db.OSKMDBA_GROUP=dba
+ oracle.install.db.OSRACDBA_GROUP=dba
+ oracle.install.db.OSRACDBA_GROUP=dba
+ SECURITY_UPDATES_VIA_MYORACLESUPPORT=false
+ DECLINE_SECURITY_UPDATES=true
+
+After making the changes to the db_install.rsp file, you are ready to run the Oracle installation. The command to run the Oracle home in silent mode (running from the database directory) is:
+./runInstaller -silent -responseFile
+/home/oracle/database/db_install.rsp
+
+
+Note that a common mistake is to put a ‘=’ after –responseFile. Do not do this, it will cause an error.
+
+
+
+
+
+
+

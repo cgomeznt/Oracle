@@ -1,0 +1,79 @@
+=======================================================================================
+PARA VER CUAL ES LA BASE DE DATOS
+=======================================================================================
+
+C:\Users\Consis01>sqlplus / as sysdba
+
+SQL*Plus: Release 12.2.0.1.0 Production on Wed Apr 25 11:18:40 2018
+
+Copyright (c) 1982, 2016, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.2.0.1.0 - 64bit Production
+
+SQL> select instance_name from v$instance;
+
+INSTANCE_NAME
+----------------
+orcl12c
+
+
+
+=======================================================================================
+CONECTAR CON EL USUARIO DEL ESQUEMA DE PRODUCTOS
+
+Debe hacer sqlplus con los usuarios y claves que le indiquen en el esquema 
+en este ejemplo es "CRECER_SEGURO"
+=======================================================================================
+
+C:\Users\Consis01>sqlplus CRECER_SEGURO/CRECER_SEGURO
+
+SQL*Plus: Release 12.2.0.1.0 Production on Wed Apr 25 11:37:53 2018
+
+Copyright (c) 1982, 2016, Oracle.  All rights reserved.
+
+Last Successful login time: Wed Apr 25 2018 11:10:34 -05:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.2.0.1.0 - 64bit Production
+
+
+SQL> update "WORKFLOWUSER" set PASSWORD='60376540b0414b3A' where LOGIN='system';
+
+1 row updated.
+
+SQL> commit;
+
+Commit complete.
+
+SQL> exit
+
+=======================================================================================
+CONECTAR CON EL USUARIO DEL ESQUEMA DE GLOBAL
+
+Debe hacer sqlplus con los usuarios y claves que le indiquen en el esquema 
+en este ejemplo es "CRECER_SEGURO_GU"
+=======================================================================================
+
+C:\Users\Consis01>sqlplus CRECER_SEGURO_GU/CRECER_SEGURO_GU
+
+SQL*Plus: Release 12.2.0.1.0 Production on Wed Apr 25 11:38:56 2018
+
+Copyright (c) 1982, 2016, Oracle.  All rights reserved.
+
+Last Successful login time: Wed Apr 25 2018 11:10:58 -05:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.2.0.1.0 - 64bit Production
+
+SQL> update "CDSE_USER" set USC_PASSWORD='60376540b0414b3A',USC_ENABLED=1,USC_ISEXPIRABLE=0,USC_ISBLOQUEABLE=0 where USC_LOGIN='system';
+
+1 row updated.
+
+SQL> commit;
+
+Commit complete.
+
+SQL>
+

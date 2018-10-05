@@ -1,0 +1,18 @@
+solucion
+
+update_system.sh 6043
+
+Este script utiliza el Acsele Configuration File
+
+===============================================================================
+export LD_LIBRARY_PATH=/home/oracle/scm/OracleClient:$LD_LIBRARY_PATH
+BASE_PATH=/home/oracle/scm/OracleClient
+
+
+CONNECT QA_RRGTGU_V138/QA_RRGTGU_V138@//192.168.1.53:1521/qa12c
+
+SELECT DISTINCT OWNER FROM ALL_OBJECTS;
+
+SELECT table_name  from all_tables where owner = 'QA_RRGT_V138';
+
+SELECT * FROM CDSE_USER WHERE USC_LOGIN='system';
