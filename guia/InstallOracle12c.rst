@@ -1,5 +1,5 @@
-
-
+Instalar Oracle 12c en CentOS 7.5
+===================================
 
 Este es el paquete que descargamos "linuxx64_12201_database.zip" desde la pagina oficial de Oracle y estar muy pendiente de hacer el cksum.::
 
@@ -337,7 +337,7 @@ El archivo queda así.::
 
 Consultamos el Listener y vemos que esta localhost.::
 
-$ lsnrctl status
+	$ lsnrctl status
 
 	LSNRCTL for Linux: Version 12.2.0.1.0 - Production on 08-OCT-2018 13:29:17
 
@@ -380,7 +380,7 @@ Debemos detenerlo.::
 Lo iniciamos nuevamente.::
 
 
-$ lsnrctl start
+	$ lsnrctl start
 
 	LSNRCTL for Linux: Version 12.2.0.1.0 - Production on 08-OCT-2018 13:28:37
 
@@ -415,7 +415,7 @@ $ lsnrctl start
 
 Debemos esperar un rato y consultar nuevamente.::
 
-$ lsnrctl status
+	$ lsnrctl status
 
 	LSNRCTL for Linux: Version 12.2.0.1.0 - Production on 08-OCT-2018 13:29:17
 
