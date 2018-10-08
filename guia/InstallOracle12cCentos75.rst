@@ -1,7 +1,7 @@
 Instalar Oracle 12c en CentOS 7.5
 ===================================
 
-Este es el paquete que descargamos "linuxx64_12201_database.zip" desde la pagina oficial de Oracle y estar muy pendiente de hacer el cksum.::
+Este es el paquete que descargamos "linuxx64_12201_database.zip" desde la pagina oficial de Oracle y estar muy pendiente de hacer el cksum. Este debe coincidir con el que esta publicado en la pagina oficial::
 
 
 	# cksum linuxx64_12201_database.zip 
@@ -46,6 +46,8 @@ Requiere /tmp como un minimo de 1Gb.::
 	S.ficheros              Tamaño Usados  Disp Uso% Montado en
 	/dev/mapper/centos-tmp   1G   120K  900K  90% /tmp
 
+Verificamos los filesystem en donde se instalara en este caso "u01".::
+
 	# df -h 
 	S.ficheros              Tamaño Usados  Disp Uso% Montado en
 	/dev/mapper/centos-root   8,5G   1,3G  7,2G  15% /
@@ -57,6 +59,7 @@ Requiere /tmp como un minimo de 1Gb.::
 	/dev/sda1                 497M   165M  333M  34% /boot
 	tmpfs                     184M      0  184M   0% /run/user/0
 
+Verificamos memoria y el swap.::
 
 	# free -h
 		      total        used        free      shared  buff/cache   available
@@ -94,7 +97,7 @@ Instalamos los siguiente paquetes que son necesarios y están indicados en el Li
 	sysstat.x86_64 \
 	unzip
 
-Instalamos un mínimo de las X11 porque son requeridas para la instalación gráfica.::
+Instalamos un mínimo de las X11 porque son requeridas para la instalación gráfica de Oracle 12c.::
 
 	# yum install -y xorg-x11-server-Xorg.x86_64 xorg-x11-xauth xorg-x11-apps.x86_64
 
@@ -103,7 +106,7 @@ Nos aseguramos que el ssh permita el forwarding de las X11.::
 	# grep X11Forwarding /etc/ssh/sshd_config 
 	X11Forwarding yes
 
-Creamos los grupos y usuarios requeridos para la instalación.::
+Creamos los grupos y usuario requeridos para la instalación de Oracle 12c.::
 
 	# groupadd oinstall
 	# groupadd dba
@@ -114,7 +117,7 @@ Creamos los grupos y usuarios requeridos para la instalación.::
 
 	# passwd oracle
 
-Configurando los Parametros del Kernel y Resource Limits.::
+Configurando los Parámetros del Kernel y Resource Limits.::
 
 	# vi /etc/sysctl.conf file.
 
@@ -130,11 +133,12 @@ Configurando los Parametros del Kernel y Resource Limits.::
 	net.core.wmem_default = 262144
 	net.core.wmem_max = 1048586
 
+Ejecutamos los siguientes comandos, para aplicar los cambios.::
 
 	# sysctl -p
 	# sysctl -a
 
-Check Resource Limits for the Oracle Software Installation Users.::
+Chequeamos los Resource Limits para el usuario oracle.::
 
 	# vi /etc/security/limits.conf
 
@@ -166,23 +170,32 @@ Hacemos inicio de sesión con el usuario oracle y verificamos.::
 	$ ulimit -Hs
 	32768
 
-Creating Required Directories.::
+Creamos los directorios requeridos.::
 
 	# mkdir -p /u01/app/
 	# mkdir -p /u01/installer
 	# chown -R oracle:oinstall /u01/app/
 	# chmod -R 775 /u01/app/
 
-Installing Oracle Database.::
+Instalando Oracle 12c R2
++++++++++++++++++++++++++
+
+Iniciamos sesión con el usuario oracle y que haga el forwarding de las X11.::
 
 	$ ssh -X oracle@192.168.0.21
 	oracle@192.168.0.21's password: 
 	Last login: Thu Oct  4 15:38:30 2018
 	/usr/bin/xauth:  file /home/oracle/.Xauthority does not exist
 
+Descomprimimos el instalador descargado.::
+
 	$ unzip linuxx64_12201_database.zip -d /u01/installer/
 
+Configuramos la variables de locale para el idioma en Ingles.::
+
 	$ export LANG=en_US.utf8 LC_ALL=en_US.utf8
+
+Ejecutamos el proceso de instalación de Oracle 12c.::
 
 	$ /u01/installer/database/runInstaller
 	Starting Oracle Universal Installer...
@@ -204,15 +217,17 @@ Installing Oracle Database.::
 
 
 
-Select the following options for basic configuration.
+Seleccionamos las siguientes opciones para una configuración Básica.
 
-Oracle base: /u01/app/oracle
-Software location: /u01/app/oracle/product/12.2.0/dbhome_1
-Database file location: /u01
-OSDBA group: dba
-Global database name: your choice. We chose orcl12c here.
-Take note of the password, as you will be using it when you first connect to the database.
-Uncheck Create as Container database.
+	Oracle base: /u01/app/oracle
+	Software location: /u01/app/oracle/product/12.2.0/dbhome_1
+	Database file location: /u01/app/oracle/oradata
+	Database edition: Enterprise Edition (7.5Gb)
+	Character set: Unicode (AL32UTF8)
+	OSDBA group: dba
+	Global database name: orcl12c
+	Password: America21
+	Create as Container database: Uncheck
 
 
 .. figure:: ../images/01.png
@@ -238,16 +253,16 @@ Uncheck Create as Container database.
 
 .. figure:: ../images/08.png
 
-Esto es excelente, si aun nos faltan dependencia, Oracle siempre nos lo indicara y la acción.
+Esto es excelente, si aun nos faltan paquetes o configurracines, Oracle siempre nos lo indicara y las acciones a tomar.
 
 .. figure:: ../images/09.png
 
 
 Sin salirnos de la instalación instalamos los componentes faltantes.:: 
 
-# yum install -y smartmontools
+	# yum install -y smartmontools
 
-Pulsamos en el boton "check again" y ya debe estar listo y podemos continuar.
+Pulsamos en el botón "check again" y ya debe estar listo y podemos continuar.
 
 
 .. figure:: ../images/10.png
@@ -257,15 +272,18 @@ Pulsamos en el boton "check again" y ya debe estar listo y podemos continuar.
 .. figure:: ../images/11.png
 
 
-Es posible que en este punto nos solicite ejecutar el script por si falta algun pre requisito
+Es posible que en este punto nos solicite ejecutar los scripts para culminar los pre-requisito
 
 
 .. figure:: ../images/12.png
 
-Nos vamos nuevamente a un terminal con **root** y ejecutamos los script que nos esta indicando y le damos continuar.::
+Nos vamos nuevamente a un terminal con **root** y ejecutamos los script que nos indicaron.::
 
 	# /u01/app/oraInventory/orainstRoot.sh
 	# /u01/app/oracle/product/12.2.0/dbhome_1/root.sh
+
+
+Retornamos a la ventana de instalación  y le damos continuar.::
 
 .. figure:: ../images/13.png
 
@@ -310,7 +328,7 @@ Configuramos las variables de entorno para el usuario oracle.::
 
 	$ source .bash_profile 
 
-Remplazamos el localhost por 0.0.0.0.::
+Remplazamos el localhost por 0.0.0.0 en el listener.ora.::
 
 	$ vi $ORACLE_HOME/network/admin/listener.ora 
 
@@ -407,7 +425,7 @@ Lo iniciamos nuevamente.::
 	Listener Parameter File   /u01/app/oracle/product/12.2.0/dbhome_1/network/admin/listener.ora
 	Listener Log File         /u01/app/oracle/diag/tnslsnr/localhost/listener/alert/log.xml
 	Listening Endpoints Summary...
-	  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521)))
+	  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=0.0.0.0)(PORT=1521)))
 	  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
 	The listener supports no services
 	The command completed successfully
