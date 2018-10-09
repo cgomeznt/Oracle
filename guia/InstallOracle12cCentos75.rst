@@ -478,12 +478,53 @@ Ya podemos ingresar a la Base de Datos con el usuario system y con la clave que 
 
 	SQL> 
 
+También con sysdba realizamos la conexión.::
+
+	$ sqlplus / as sysdba
+
+	SQL*Plus: Release 12.2.0.1.0 Production on Mon Oct 8 14:59:45 2018
+
+	Copyright (c) 1982, 2016, Oracle.  All rights reserved.
 
 
+	Connected to:
+	Oracle Database 12c Enterprise Edition Release 12.2.0.1.0 - 64bit Production
+
+	SQL> 
 
 
+Habilitamos el inicio automático despues del Boot al Oracle 12c
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Para habilitar el servicio automático de la base de datos Oracle 12c, agregamos las siguientes lineas en el archivo "/etc/systemd/system/oracle-rdbms.service".::
+
+	# /etc/systemd/system/oracle-rdbms.service
+	# Invoking Oracle scripts to start/shutdown Instances defined in /etc/oratab
+	# and starts Listener
+
+	[Unit]
+	Description=Oracle Database(s) and Listener
+	Requires=network.target
+
+	[Service]
+	Type=forking
+	Restart=no
+	ExecStart=/u01/app/oracle/product/12.2.0/dbhome_1/bin/dbstart /u01/app/oracle/product/12.2.0/dbhome_1
+	ExecStop=/u01/app/oracle/product/12.2.0/dbhome_1/bin/dbshut /u01/app/oracle/product/12.2.0/dbhome_1
+	User=oracle
+
+	[Install]
+	WantedBy=multi-user.target
 
 
+Finalmente, debemos indicar que la base de datos **orcl12c** debe iniciar luego que se haga el boot en /etc/oratab (Y: Yes).
 
+
+Verificamos.::
+
+	# ps -ef | grep pmon
+	root      4471  1312  0 17:37 pts/0    00:00:00 grep --color=auto pmon
+	oracle   21400     1  0 13:18 ?        00:00:01 ora_pmon_orcl12c
+	oracle   31534     1  0 16:07 ?        00:00:00 ora_pmon_GESTION
 
 
