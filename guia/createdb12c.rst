@@ -1,5 +1,5 @@
 Crear una Base de Datos en Oracle 12c
-========================================
+======================================== 
 
 
 Desde el punto de vista físico, una base de datos es para oracle, un conjunto de ficheros, a saber:
@@ -256,12 +256,105 @@ This is the same, only the best read for interface Human.::
 	UNDO TABLESPACE UNDOTBS1
 	DEFAULT TABLESPACE users;
 
-Verify.::
+
+Step 10: Create Additional Tablespaces
+++++++++++++++++++++++++++++++++++++++++++
+
+To make the database functional, you need to create additional tablespaces for your application data. The following sample script creates some additional tablespaces::
+
+	CREATE TABLESPACE apps_tbs LOGGING 
+	     DATAFILE '/u01/app/oracle/oradata/mynewdb/apps01.dbf' 
+	     SIZE 500M REUSE AUTOEXTEND ON NEXT  1280K MAXSIZE UNLIMITED 
+	     EXTENT MANAGEMENT LOCAL;
+
+	Tablespace created.
+
+
+	-- create a tablespace for indexes, separate from user tablespace (optional)
+	CREATE TABLESPACE indx_tbs LOGGING 
+	     DATAFILE '/u01/app/oracle/oradata/mynewdb/indx01.dbf' 
+	     SIZE 100M REUSE AUTOEXTEND ON NEXT  1280K MAXSIZE UNLIMITED 
+	     EXTENT MANAGEMENT LOCAL;
+
+	Tablespace created.
+
+For information about creating tablespaces, see Chapter 12, "Managing Tablespaces". https://docs.oracle.com/cd/B28359_01/server.111/b28310/tspaces.htm#g1029288
+
+
+Step 11: Run Scripts to Build Data Dictionary Views
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Run the scripts necessary to build data dictionary views, synonyms, and PL/SQL packages, and to support proper functioning of SQL*Plus::
+
+	@?/rdbms/admin/catalog.sql
+	@?/rdbms/admin/catproc.sql
+	@?/sqlplus/admin/pupbld.sql
+	EXIT
+
+**Description scripts**
+
+CATALOG.SQL	Creates the views of the data dictionary tables, the dynamic performance views, and public synonyms for many of the views. Grants PUBLIC access to the synonyms.
+
+CATPROC.SQL	Runs all scripts required for or used with PL/SQL.
+
+PUPBLD.SQL	Required for SQL*Plus. Enables SQL*Plus to disable commands by user.
+
+Step 12: Run Scripts to Install Additional Options (Optional)
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+You may want to run other scripts. The scripts that you run are determined by the features and options you choose to use or install. Many of the scripts available to you are described in the Oracle Database Reference.
+
+If you plan to install other Oracle products to work with this database, see the installation instructions for those products. Some products require you to create additional data dictionary tables. Usually, command files are provided to create and load these tables into the database data dictionary.
+
+See your Oracle documentation for the specific products that you plan to install for installation and administration instructions.
+
+Step 13: Back Up the Database.
+++++++++++++++++++++++++++++++++
+
+Take a full backup of the database to ensure that you have a complete set of files from which to recover if a media failure occurs. For information on backing up a database, see Oracle Database Backup and Recovery User's Guide. https://docs.oracle.com/cd/B28359_01/backup.111/b28270/toc.htm
+
+
+Verify – Shutdown and Startup
+++++++++++++++++++++++++++++++++
+
+Finally, perform a regular shutdown and startup to make sure everything works as expected on this new database.
+
+View memory process.::
 
 	ps -ef | grep pmon
 	oracle   10587     1  0 11:01 ?        00:03:21 ora_pmon_mynewdb
 	oracle   10626     1  0 13:23 ?        00:00:00 ora_pmon_mynewdb2
-	root     10910  1356  0 13:26 pts/0    00:00:00 grep --color=auto pmon
 
+Down de Database had in ORACLE_SID.::
 
+	$ sqlplus / as sysdba
+	SQL> SHUTDOWN 
+	Database closed.
+	Database dismounted.
+	ORACLE instance shut down.
 
+View memory process again.::
+
+	ps -ef | grep pmon
+	oracle   10587     1  0 11:01 ?        00:03:21 ora_pmon_mynewdb
+
+Start up Databases had in ORACLE_SID.::
+
+	$ sqlplus / as sysdba
+	SQL> STARTUP
+	ORACLE instance started.
+
+	Total System Global Area  771751936 bytes
+	Fixed Size		    8625464 bytes
+	Variable Size		  503317192 bytes
+	Database Buffers	  255852544 bytes
+	Redo Buffers		    3956736 bytes
+	Database mounted.
+	Database opened.
+	SQL> 
+
+View memory process again.::
+
+	ps -ef | grep pmon
+	oracle   10587     1  0 11:01 ?        00:03:21 ora_pmon_mynewdb
+	oracle   10626     1  0 13:23 ?        00:00:00 ora_pmon_mynewdb2
