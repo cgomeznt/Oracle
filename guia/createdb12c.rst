@@ -19,7 +19,7 @@ Step 1: Specify an Instance Identifier (SID)
 
 Decide on a unique Oracle system identifier (SID) for your instance, open a command window, and set the ORACLE_SID environment variable. Use this command windows for the subsequent steps.
 
-ORACLE_SID is used to distinguish this instance from other Oracle Database instances that you may create later and run concurrently on the same host computer. The maximum number of characters for ORACLE_SID is 12, and only letters and numeric digits are permitted. On some platforms, the SID is case-sensitive.
+ORACLE_SID is used to distinguish this instance from other Oracle Database instances that you may create later and run concurrently on the same host computer. The maximum number of characters for ORACLE_SID is 12, and only letters and numeric digits are permitted. On some platforms, the SID is case-sensitive.::
 
 	ORACLE_SID=mynewdb
 	export ORACLE_SID
@@ -29,7 +29,7 @@ Step 2: Ensure That the Required Environment Variables Are Set
 
 Depending on your platform, before you can start SQL*Plus (as required in Step 6: Connect to the Instance), you may have to set environment variables, or at least verify that they are set properly.
 
-For example, on most platforms, ORACLE_SID and ORACLE_HOME must be set. In addition, it is advisable to set the PATH variable to include the ORACLE_HOME/bin directory. On the UNIX and Linux platforms, you must set these environment variables manually. On the Windows platform, OUI automatically assigns values to ORACLE_HOME and ORACLE_SID in the Windows registry. If you did not create a database upon installation, OUI does not set ORACLE_SID in the registry, and you will have to set the ORACLE_SID environment variable when you create your database later.:_
+For example, on most platforms, ORACLE_SID and ORACLE_HOME must be set. In addition, it is advisable to set the PATH variable to include the ORACLE_HOME/bin directory. On the UNIX and Linux platforms, you must set these environment variables manually. On the Windows platform, OUI automatically assigns values to ORACLE_HOME and ORACLE_SID in the Windows registry. If you did not create a database upon installation, OUI does not set ORACLE_SID in the registry, and you will have to set the ORACLE_SID environment variable when you create your database later.::
 
 	export ORACLE_BASE=/u01/app/oracle
 	export ORACLE_HOME=/u01/app/oracle/product/11.2.0
@@ -160,7 +160,7 @@ The following statement creates database mynewdb. This database name must agree 
 
 	CREATE DATABASE mynewdb USER SYS IDENTIFIED BY America21 USER SYSTEM IDENTIFIED BY America22 LOGFILE GROUP 1 ('/u01/app/oracle/oradata/mynewdb/redo01.log') SIZE 100M, GROUP 2 ('/u01/app/oracle/oradata/mynewdb/redo02.log') SIZE 100M, GROUP 3 ('/u01/app/oracle/oradata/mynewdb/redo03.log') SIZE 100M MAXLOGFILES 5 MAXLOGMEMBERS 5 MAXLOGHISTORY 1  MAXDATAFILES 100 CHARACTER SET US7ASCII NATIONAL CHARACTER SET AL16UTF16 EXTENT MANAGEMENT LOCAL DATAFILE '/u01/app/oracle/oradata/mynewdb/system01.dbf' SIZE 325M REUSE SYSAUX DATAFILE '/u01/app/oracle/oradata/mynewdb/sysaux01.dbf' SIZE 325M REUSE DEFAULT TABLESPACE users DATAFILE '/u01/app/oracle/oradata/mynewdb/users01.dbf' SIZE 500M REUSE AUTOEXTEND ON MAXSIZE UNLIMITED DEFAULT TEMPORARY TABLESPACE tempts1 TEMPFILE '/u01/app/oracle/oradata/mynewdb/temp01.dbf' SIZE 20M REUSE UNDO TABLESPACE UNDOTBS1 DATAFILE '/u01/app/oracle/oradata/mynewdb/UNDOTBS1.dbf'  SIZE 200M REUSE AUTOEXTEND ON MAXSIZE UNLIMITED;
 
-Esto es lo mismo, pero esta formateado para hacerlo simple a la lectura.::
+This is the same, only the best read for interface Human.::
 
 	CREATE DATABASE mynewdb
 	   USER SYS IDENTIFIED BY America21
@@ -246,7 +246,7 @@ With Oracle Managed Files and the following CREATE DATABASE statement, the datab
 
 	CREATE DATABASE mynewdb2 USER SYS IDENTIFIED BY sys_password USER SYSTEM IDENTIFIED BY system_password EXTENT MANAGEMENT LOCAL DEFAULT TEMPORARY TABLESPACE temp UNDO TABLESPACE UNDOTBS1 DEFAULT TABLESPACE users;
 
-Esto es lo mismo, pero esta formateado para hacerlo simple a la lectura.::
+This is the same, only the best read for interface Human.::
 
 	CREATE DATABASE mynewdb2
 	USER SYS IDENTIFIED BY sys_password
