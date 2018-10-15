@@ -313,6 +313,16 @@ Step 13: Back Up the Database.
 
 Take a full backup of the database to ensure that you have a complete set of files from which to recover if a media failure occurs. For information on backing up a database, see Oracle Database Backup and Recovery User's Guide. https://docs.oracle.com/cd/B28359_01/backup.111/b28270/toc.htm
 
+Step 14: (Optional) Enable Automatic Instance Startup
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+You might want to configure the Oracle instance to start automatically when its host computer restarts. See your operating system documentation for instructions. For example, on Windows, use the following command to configure the database service to start the instance upon computer restart::
+
+	ORADIM -EDIT -SID sid -STARTMODE AUTO -SRVCSTART SYSTEM [-SPFILE]
+
+You must use the -SPFILE argument if you want the instance to read an SPFILE upon automatic restart.
+
+See the section "Using ORADIM to Administer an Oracle Database Instance" in Oracle Database Platform Guide for Microsoft Windows for more information on the ORADIM command.
 
 Verify – Shutdown and Startup
 ++++++++++++++++++++++++++++++++
