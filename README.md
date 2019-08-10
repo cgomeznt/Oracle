@@ -4,6 +4,7 @@
 * [Instalar Oracle 12c en CentOS 7.5](guia/InstallOracle12cCentos75.rst) 
 * [Desinstalar Oracle 12c en CentOS 7.5](guia/uninstallOracle12cCentos75.rst) 
 * [Instalar Oracle 12c solo los binarios en CentOS 7.5](guia/InstallOracle12cbinariosCentos75.rst) 
+* [Pasos para la Simplificar la Preinstalación de BD 12c en Oracle Linux](guia/Preinstalacion_RPM_OL.rst) 
 * [Crear una Base de Datos en Oracle 12c](guia/createdb12c.rst) 
 * [Crear una Tabla](guia/createtable.rst) 
 

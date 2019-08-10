@@ -73,7 +73,7 @@ Instalar.::
 	Starting Oracle Database 11g Express Edition instance...Done
 	Installation completed successfully.
 
-Realizamos algunas pruebas
+Realizamos algunas pruebas.::
 
 	# ps -ef | grep pmon
 	oracle    2799     1  0 16:13 ?        00:00:00 xe_pmon_XE
