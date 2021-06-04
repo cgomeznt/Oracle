@@ -228,11 +228,16 @@ Ahora para bajar la base de datos y subirla .::
 	Connected.
 	SQL> startup
 
+TIPS
++++++++++
 
-SELECT * FROM APPS-SCHEMA.TEST1;
+	SELECT * FROM APPS-SCHEMA.TEST1;
 
-Select * from "APPS-SCHEMA".TEST1;
-SELECT COUNT(*) FROM "APPS-SCHEMA".TEST1;
+	Select owner, table_name from dba_tables where table_name = 'TEST1';
 
-truncate table "APPS-SCHEMA".TEST1;
+	Select * from "APPS-SCHEMA".TEST1;
+
+	SELECT COUNT(*) FROM "APPS-SCHEMA".TEST1;
+
+	truncate table "APPS-SCHEMA".TEST1;
 
