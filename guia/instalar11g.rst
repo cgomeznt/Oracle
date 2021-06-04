@@ -209,6 +209,8 @@ To view all users.::
  
 	SQL> select * from all_users;
 
+
+
 Ahora para bajar la base de datos y subirla .::
 
 	SQL> conn sys as sysdba
@@ -226,4 +228,11 @@ Ahora para bajar la base de datos y subirla .::
 	Connected.
 	SQL> startup
 
+
+SELECT * FROM APPS-SCHEMA.TEST1;
+
+Select * from "APPS-SCHEMA".TEST1;
+SELECT COUNT(*) FROM "APPS-SCHEMA".TEST1;
+
+truncate table "APPS-SCHEMA".TEST1;
 
