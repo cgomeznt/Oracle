@@ -170,7 +170,7 @@ Nos conectamos al sqlplus.::
 
 	Copyright (c) 1982, 2011, Oracle.  All rights reserved.
 
-	Enter password: 
+	Enter password: Venezuela21
 
 	Connected to:
 	Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
