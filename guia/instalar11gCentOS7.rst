@@ -89,18 +89,18 @@ Hacemos un netstat y le ponemos cuidado a los puertos 8080, 1521 y 46034::
 
 Probamos los link de Oracle Express
 
-http://192.168.56.11:8080/apex/apex_admin
+http://192.168.1.100:8080/apex/apex_admin
 
 .. figure:: ../images/11/01.png
 
-http://192.168.56.11:8080/apex/
+http://192.168.1.100:8080/apex/
 
 .. figure:: ../images/11/02.png
 
 Crear un WorkApace y su tabla
 ++++++++++++++++++++++++++++++
 
-Ingresamos a http://192.168.56.11:8080/apex/apex_admin con el usuario admin y la clave que colocamos cuando estabamos instaland.
+Ingresamos a http://192.168.1.100:8080/apex/apex_admin con el usuario admin y la clave que colocamos cuando estabamos instalando.
 
 .. figure:: ../images/11/01.png
 
@@ -121,7 +121,7 @@ Ingresamos a http://192.168.56.11:8080/apex/apex_admin con el usuario admin y la
 .. figure:: ../images/11/10.png
 
 
-Ahora vamos a crear una tabla dentro de ese workspace, en http://192.168.56.11:8080/apex/
+Ahora vamos a crear una tabla dentro de ese workspace, en http://192.168.1.100:8080/apex/
 
 .. figure:: ../images/11/11.png
 
@@ -131,9 +131,52 @@ Ahora vamos a crear una tabla dentro de ese workspace, en http://192.168.56.11:8
 
 .. figure:: ../images/11/14.png
 
+CREATE TABLE TEST1 (ID NUMBER(4), USERNAME VARCHAR2(20));
+
 .. figure:: ../images/11/15.png
 
 .. figure:: ../images/11/16.png
+
+Listo con esto ya tenemos instalado el Oracle XE ...!!!!
+
+
+Tips
++++++
+
+Nos conectamos a la consola de sqlplus, pero nos validamos primero con el usuario oracle y nos aseguramos que tenga set todas las variables.::
+
+	# su - oracle
+	$ echo $ORACLE_HOME
+
+	$ 
+	$ . /u01/app/oracle/product/11.2.0/xe/bin/oracle_env.sh
+
+	$ echo $ORACLE_HOME
+	/u01/app/oracle/product/11.2.0/xe
+
+Lo dejamos fijo en el .bash_profile del usuario oracle.::
+
+	$ cd
+	$ pwd
+	/u01/app/oracle
+	$ vi .bash_profile
+	. /u01/app/oracle/product/11.2.0/xe/bin/oracle_env.sh
+
+Nos conectamos al sqlplux.::
+
+	$ sqlplus system
+
+	SQL*Plus: Release 11.2.0.2.0 Production on Fri Jun 4 16:39:45 2021
+
+	Copyright (c) 1982, 2011, Oracle.  All rights reserved.
+
+	Enter password: 
+
+	Connected to:
+	Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
+
+	SQL> 
+
 
 
 Ahora si olvidamos el password.::
@@ -153,43 +196,6 @@ Ahora si olvidamos el password.::
 	User altered.
 
 	SQL> quit
-
-Nos conectamos a la consola de sqlplus, pero nos validamos primero con el usaurio oracle y nos aseguramos que tenga setada todas las variables.::
-
-	# su - oracle
-	$ echo $ORACLE_HOME
-
-	$ 
-	$ . /u01/app/oracle/product/11.2.0/xe/bin/oracle_env.sh
-
-	$ORACLE_HOME
-	/u01/app/oracle/product/11.2.0/xe
-
-Lo dejamos fijo en el .bash_profile del usuario oracle.::
-
-	$ cd
-	$ pwd
-	/u01/app/oracle
-	$ vi .bash_profile
-	. /u01/app/oracle/product/11.2.0/xe/bin/oracle_env.sh
-
-.::
-
-	$ sqlplus system
-
-	SQL*Plus: Release 11.2.0.2.0 Production on Sat Oct 8 16:58:47 2016
-
-	Copyright (c) 1982, 2011, Oracle.  All rights reserved.
-
-	Enter password: 
-
-	Connected to:
-	Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
-
-	SQL> 
-
-.::
-
 
 To view database.::
  
@@ -225,7 +231,6 @@ Ahora para bajar la base de datos y subirla .::
 TIPS
 +++++++++
 
-	SELECT * FROM APPS-SCHEMA.TEST1;
 
 	Select owner, table_name from dba_tables where table_name = 'TEST1';
 
