@@ -162,7 +162,7 @@ Lo dejamos fijo en el .bash_profile del usuario oracle.::
 	$ vi .bash_profile
 	. /u01/app/oracle/product/11.2.0/xe/bin/oracle_env.sh
 
-Nos conectamos al sqlplux.::
+Nos conectamos al sqlplus.::
 
 	$ sqlplus system
 
@@ -230,7 +230,7 @@ Ahora para bajar la base de datos y subirla .::
 
 TIPS
 +++++++++
-
+.::
 
 	Select owner, table_name from dba_tables where table_name = 'TEST1';
 
