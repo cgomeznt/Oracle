@@ -7,7 +7,7 @@ Recordemos deshabilitar Selinux y Firewalld.
 
 Instalar los paquetes requeridos.::
 
-	# yum -y install libgcc glibc unzip
+	# yum -y install libnsl libgcc glibc unzip
 
 Instalar.::
 
